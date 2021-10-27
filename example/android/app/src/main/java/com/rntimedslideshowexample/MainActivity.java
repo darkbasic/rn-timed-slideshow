@@ -1,4 +1,4 @@
-package com.example.rntimedslideshow;
+package com.rntimedslideshowexample;
 
 import com.facebook.react.ReactActivity;
 

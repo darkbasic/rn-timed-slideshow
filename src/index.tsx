@@ -1,3 +1,5 @@
-export function multiply(a: number, b: number): Promise<number> {
-  return Promise.resolve(a * b);
-}
+import TimedSlideshow, { TimedSlideshowProps } from './TimedSlideShow';
+import ImageWrapper, { ImageWrapperProps } from './ImageWrapper';
+
+export { TimedSlideshowProps, TimedSlideshow, ImageWrapperProps, ImageWrapper };
+export default TimedSlideshow;
