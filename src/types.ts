@@ -3,12 +3,12 @@ export type Item = {
    * @param {string} title
    * The title for the slide footer
    */
-  title: string;
+  title?: string;
   /**
    * @param {string} text
    * The text for the slide footer
    */
-  text: string;
+  text?: string;
   /**
    * @param {string | number} uri
    * The image path for the slide
