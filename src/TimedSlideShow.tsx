@@ -533,7 +533,7 @@ export default class TimedSlideshow extends Component<Props, State> {
         style={[
           Styles.footerContainer,
           !showFooterContent && {
-            height: 'auto',
+            height: 0,
             backgroundColor: 'transparent',
           },
           footerStyle,
