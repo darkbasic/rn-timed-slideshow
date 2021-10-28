@@ -74,11 +74,32 @@ export interface TimedSlideshowProps {
   showProgressBar?: boolean;
 
   /**
+   * @param {boolean} multipleProgressBars
+   * Flag to show a single or multiple progress bars
+   * Default: false
+   */
+  multipleProgressBars?: boolean;
+
+  /**
+   * @param {boolean} progressBarsSpacing
+   * The margin between each progress bar
+   * Default: 12
+   */
+  progressBarsSpacing?: boolean;
+
+  /**
    * @param {string} progressBarDirection
    * Progress bar animation direction
    * Default: 'middle'
    */
   progressBarDirection?: ProgressBarDirection;
+
+  /**
+   * @param {boolean} showFooterContent
+   * Flag to show or hide the footer content
+   * Default: true
+   */
+  showFooterContent?: boolean;
 
   /**
    * @param {string} slideDirection
@@ -95,6 +116,20 @@ export interface TimedSlideshowProps {
   footerStyle?: ViewStyle;
 
   /**
+   * @param {ViewStyle} progressBarContainerStyle
+   * Stylesheet object for the progress bar container
+   * Default: null
+   */
+  progressBarContainerStyle?: ViewStyle;
+
+  /**
+   * @param {ViewStyle} progressBarStyle
+   * Stylesheet object for the progress bar
+   * Default: null
+   */
+  progressBarStyle?: ViewStyle;
+
+  /**
    * @param {TextStyle} titleStyle
    * Stylesheet object for the footer title
    * Default: null
@@ -107,6 +142,13 @@ export interface TimedSlideshowProps {
    * Default: null
    */
   textStyle?: TextStyle;
+
+  /**
+   * @param {ViewStyle} closeImgWrapperStyle
+   * Stylesheet object for the close button img wrapper
+   * Default: null
+   */
+  closeImgWrapperStyle?: TextStyle;
 
   /**
    * @param {function} renderItem
@@ -179,6 +221,9 @@ export default class TimedSlideshow extends Component<Props, State> {
     extraSpacing: EXTRA_WIDTH,
     fullWidth: false,
     showProgressBar: true,
+    multipleProgressBars: false,
+    progressBarsSpacing: 12,
+    showFooterContent: true,
     slideDirection: 'even' as SlideDirection,
     progressBarDirection: 'middle' as ProgressBarDirection,
     loop: true,
@@ -287,21 +332,36 @@ export default class TimedSlideshow extends Component<Props, State> {
   }
 
   renderProgressBar() {
-    const { showProgressBar, progressBarDirection, progressBarColor } =
-      this.props;
-    const { layoutWidth } = this.state;
+    const {
+      showProgressBar,
+      progressBarDirection,
+      progressBarColor,
+      items,
+      multipleProgressBars,
+      progressBarsSpacing,
+      showFooterContent,
+      progressBarContainerStyle,
+      progressBarStyle,
+    } = this.props;
+    const { layoutWidth, index } = this.state;
     if (!showProgressBar) return null;
 
     let animation: Animated.AnimatedProps<StyleProp<ViewStyle>> = {
       transform: [{ scaleX: this.state.timer }],
     };
 
+    // Footer container as a width of 100% with paddingHorizontal of 7.5%
+    const containerWidth = layoutWidth * 0.85;
+    const progressBarWidth = multipleProgressBars
+      ? (containerWidth - (items.length - 1) * progressBarsSpacing) /
+        items.length
+      : containerWidth;
+
     if (
       progressBarDirection === 'fromLeft' ||
       progressBarDirection === 'fromRight'
     ) {
-      // Footer container as a width of 100% with paddingHorizontal of 7.5%
-      let initialValue = layoutWidth * 0.85;
+      let initialValue = progressBarWidth;
 
       if (progressBarDirection === 'fromLeft') initialValue *= -1;
 
@@ -317,8 +377,36 @@ export default class TimedSlideshow extends Component<Props, State> {
     if (progressBarColor) animation.backgroundColor = progressBarColor;
 
     return (
-      <View style={Styles.progressBarContainer}>
-        <Animated.View style={[Styles.progressBar, animation]} />
+      <View style={{ width: '100%', flexDirection: 'row' }}>
+        {items.map(
+          (_el, i) =>
+            (multipleProgressBars || index === i) && (
+              <View
+                key={i}
+                style={[
+                  Styles.progressBarContainer,
+                  !showFooterContent && { backgroundColor: 'rgba(0,0,0,0.4)' },
+                  { width: progressBarWidth },
+                  multipleProgressBars &&
+                    i < items.length - 1 && {
+                      marginRight: progressBarsSpacing,
+                    },
+                  progressBarContainerStyle,
+                ]}
+              >
+                {index === i && (
+                  <Animated.View
+                    style={[
+                      Styles.progressBar,
+                      { width: progressBarWidth },
+                      animation,
+                      progressBarStyle,
+                    ]}
+                  />
+                )}
+              </View>
+            )
+        )}
       </View>
     );
   }
@@ -343,7 +431,7 @@ export default class TimedSlideshow extends Component<Props, State> {
   }
 
   renderCloseIcon() {
-    const { renderCloseIcon } = this.props;
+    const { renderCloseIcon, closeImgWrapperStyle } = this.props;
     if (typeof renderCloseIcon === 'function')
       return renderCloseIcon({
         wrapperStyle: Styles.closeImgWrapper,
@@ -353,7 +441,7 @@ export default class TimedSlideshow extends Component<Props, State> {
 
     return (
       <TouchableWithoutFeedback onPress={this.onClose}>
-        <View style={Styles.closeImgWrapper}>
+        <View style={[Styles.closeImgWrapper, closeImgWrapperStyle]}>
           <Image source={require('./close.png')} style={Styles.closeImg} />
         </View>
       </TouchableWithoutFeedback>
@@ -439,11 +527,20 @@ export default class TimedSlideshow extends Component<Props, State> {
   }
 
   renderFooter() {
-    const { footerStyle } = this.props;
+    const { footerStyle, showFooterContent } = this.props;
     return (
-      <View style={[Styles.footerContainer, footerStyle]}>
+      <View
+        style={[
+          Styles.footerContainer,
+          !showFooterContent && {
+            height: 'auto',
+            backgroundColor: 'transparent',
+          },
+          footerStyle,
+        ]}
+      >
         {this.renderProgressBar()}
-        {this.renderFooterContent()}
+        {showFooterContent && this.renderFooterContent()}
       </View>
     );
   }

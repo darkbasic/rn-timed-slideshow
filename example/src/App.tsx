@@ -24,7 +24,18 @@ export default function App() {
     },
   ];
 
-  return <TimedSlideshow items={items} />;
+  return (
+    <TimedSlideshow
+      items={items}
+      progressBarDirection="fromLeft"
+      multipleProgressBars={true}
+      showFooterContent={false}
+      footerStyle={{top: 0, paddingVertical: 16}}
+      progressBarContainerStyle={{height: 6, borderRadius: 6 / 2}}
+      progressBarStyle={{height: 6, borderRadius: 6 / 2}}
+      closeImgWrapperStyle={{top: 50}}
+    />
+  );
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
