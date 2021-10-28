@@ -30,24 +30,17 @@ export default function App() {
       progressBarDirection="fromLeft"
       multipleProgressBars={true}
       showFooterContent={false}
-      footerStyle={{top: 0, paddingVertical: 16}}
-      progressBarContainerStyle={{height: 6, borderRadius: 6 / 2}}
-      progressBarStyle={{height: 6, borderRadius: 6 / 2}}
-      closeImgWrapperStyle={{top: 50}}
+      footerStyle={styles.footerStyle}
+      progressBarContainerStyle={styles.progressBarContainerStyle}
+      progressBarStyle={styles.progressBarStyle}
+      closeImgWrapperStyle={styles.closeImgWrapperStyle}
     />
   );
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  box: {
-    width: 60,
-    height: 60,
-    marginVertical: 20,
-  },
+  footerStyle: { top: 0, paddingVertical: 16 },
+  progressBarContainerStyle: { height: 6, borderRadius: 6 / 2 },
+  progressBarStyle: { height: 6, borderRadius: 6 / 2 },
+  closeImgWrapperStyle: { top: 50 },
 });
