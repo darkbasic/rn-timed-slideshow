@@ -1,6 +1,6 @@
 {
   "name": "rn-timed-slideshow",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A Typescript slideshow component for React-Native (Android and iOS). React-Native-Timed-Slideshow, as the name suggests, is a Slideshow component with timed animation. It uses Animated library from React-Native, with native driver (only native animations).",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
