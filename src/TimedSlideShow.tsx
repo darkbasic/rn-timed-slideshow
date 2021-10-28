@@ -196,7 +196,7 @@ export interface TimedSlideshowProps {
    * @param {function} onClose
    * Callback when user clicks the close button
    */
-  onClose?: (index: number) => JSX.Element;
+  onClose?: (index?: number) => void;
 }
 
 type Props = Omit<
